@@ -1,0 +1,47 @@
+﻿@model PersonalBlog.WebUI.Models.RegisterModel
+
+@{
+    Layout = "~/Views/Shared/_Log.cshtml";
+}
+<div id="form-reg-pad">
+    @using (Html.BeginForm())
+    {
+        <div><h3>Регистрация</h3></div>
+        @Html.AntiForgeryToken()
+        @Html.ValidationMessage("Reg")
+        <div class="form-group">
+            @Html.Label("Имя пользователя:")
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            мужчина
+            @Html.RadioButtonFor(model => model.Gender, "Male", new { @checked = true })
+            женщина
+            @Html.RadioButtonFor(model => model.Gender, "Female")
+        </div>
+        <div class="form-group">
+            @Html.Label("Ваш возраст:")
+            @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Пароль:")
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Повторите пароль:")
+            @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Страна:")
+            @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+        </div>
+        <div>
+            <input type="submit" value="Зарегистрироваться" class="btn btn-primary" />
+        </div>
+    }
+</div>

@@ -1,0 +1,64 @@
+﻿@using PersonalBlog.Domain.Entities
+@model PersonalBlog.WebUI.Models.PostsListViewModel<Post>
+@using PersonalBlog.WebUI.HtmlHelpers
+
+@{
+    ViewBag.Title = "Posts";
+}
+<div id="full-post-blockt">
+    <div id="full-post-blockt-div">
+        <div id="full-post-flex">
+            <div class="pager">
+                @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, tag = Model.CurrentTag }))
+            </div>
+            @foreach (var p in Model.Collection)
+            {
+                <div id="div-collection-1">
+                    <div>
+                        @if (p.ImageData != null)
+                        {
+                            <img src="@Url.Action("GetImagePost", "Post", new { p.PostId })" class="image-background-manager">
+                        }
+                    </div>
+                        <h3>@p.Title</h3>
+                        <div class="fullpost-string">
+                            <div class="part-full-post"><h4 class="h4-Blog-name"> @p.Blog.Name</h4></div>
+                            <div class="part-full-post">
+                                <h4 class="h4-full-post">
+                                    <img src="~/Content/Picture/calend.png" class="calend">
+                                    @p.DateOfCreate.DateTime.ToLongDateString()
+                                </h4>
+                            </div>
+                            <div class="part-full-post">
+                                <h4 class="h4-full-post">
+                                    Теги:@if (p.Tags != null)
+                                    {
+                                        foreach (var link in p.Tags)
+                                        {
+                                            if (link.Name != null)
+                                            {
+                                                @Html.RouteLink(link.Name, new {controller = "Post",action = "List",tag = link.Name,
+                                                                                            page = 1},
+                                                                                            new { @class = link.Name == ViewBag.SelectedTag ? "selected" : null})
+                                            }
+                                        }
+                                    }
+                                </h4>
+                            </div>
+                        </div>
+                    <div id="div-diskr">
+                        <h5>@p.Description</h5>
+                    </div>
+                    <div class="link-buttom">
+                        @Html.ActionLink("Читать полностью", "FullPost", new { postId = p.PostId })
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="Tagmenu">
+        @Html.Action("MenuTag", "Tag")
+    </div>
+</div>
+
+

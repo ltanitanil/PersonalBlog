@@ -1,0 +1,31 @@
+﻿@model PersonalBlog.WebUI.Models.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_Log.cshtml";
+}
+<div class="login-page">
+    <div class="part-flex-login">
+            @using (Html.BeginForm())
+            {
+                <div><h3>Вход</h3></div>
+                @Html.ValidationMessage("notLog")
+                <div class="form-group">
+                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Логин" })
+                </div>
+                <div class="form-group">
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Пароль" })
+                </div>
+                <div class="form-group-bottom">
+                    @Html.ActionLink("Регистрация", "Register")
+                    <input type="submit" value="Войти" class="btn btn-primary" />
+                </div>
+            }
+    </div>
+    <div class="part-flex-login">
+        <div class="login-message">
+            <h2><p>Давай растопим лед между нами.</p><p>Для этого необходимо зарегистрироваться или войти в систему</p></h2>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@model PersonalBlog.Domain.Entities.Post
+
+@{
+    ViewBag.Title = "PostEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("PostEdit", "BlogManager", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.PostId)
+    @Html.HiddenFor(model => model.BlogId)
+    <div class="editor-field">
+        @if (Model.ImageData != null)
+        {
+        <img src="@Url.Action("GetImagePost", "BlogManager", new { Model.PostId})" id="postEdit-img" />
+        }
+        <div>
+            <input type="file" name="Image" />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Название поста:")
+        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.Label("Описание:")
+        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.Label("Текст:")
+        @Html.TextAreaFor(model => model.Text, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+    </div>
+    <div id="Tags">
+        <div class="tags-name-add">
+        Теги:<a class="addLink"><img src="~/Content/Picture/createe.png" class="input-add"></a>
+        </div>
+        @Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+        @if (Model.Tags != null) { 
+        for (int i = 0; i < Model.Tags.Count(); i++)
+        {
+        <div class="Tag-one">
+            @Html.EditorFor(m => Model.Tags[i].Name, new { htmlAttributes = new { @class = "form-control" } })
+            <a class="deleteLink" id="@i"><img src="~/Content/Picture/m.png" class="manager-link-delete"/></a>
+        </div>
+        }}
+    </div>
+    
+    <div class="form-group-bottom">
+        @Html.ActionLink("Назад", "Manager")
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+    </div>
+}
+    <script>
+    $(function () {
+        var i = $(".Tag-one").length-1;
+        $('.addLink').click(function () {
+        i++;
+        var html2Add = "<div class='Tag-one'>"+
+            "<input type='text' name='Tags[" + i + "].Name' class='form-control'/>"
+                + "<a class='deleteLink' id='" + i + "'><img src='/Content/Picture/m.png' class='manager-link-delete '/></a>" + "</div>";
+            $('#Tags').append(html2Add);
+        })
+        $('body').on('click', '.deleteLink', function (event) {
+            var idtag = event.target.id;
+            alert(idtag);
+            var html3Mulyazh = "<div class='Tag-one' style='display:none;'>"+
+            "<input type='text' name='Tags[" + idtag + "].Name' class='form-control' value=''/>";
+            $('#Tags').append(html3Mulyazh);
+            $(this).parent().remove();
+
+        });
+    });
+    </script>
+<script>
+</script>

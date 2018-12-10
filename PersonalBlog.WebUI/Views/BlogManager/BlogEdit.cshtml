@@ -1,0 +1,33 @@
+﻿@model PersonalBlog.Domain.Entities.Blog
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("BlogEdit", "BlogManager", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.BlogId)
+    <div class="editor-field">
+        @if (Model.ImageData != null)
+        {
+        <img src="@Url.Action("GetImage", "BlogManager", new { Model.BlogId })" id="postEdit-img" />
+        }
+        <div>
+            <input type="file" name="Image" />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Название блога:")
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group-bottom">
+        @Html.ActionLink("Назад", "Manager")
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+    </div>
+}
+
+

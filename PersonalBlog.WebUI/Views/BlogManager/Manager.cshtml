@@ -1,0 +1,44 @@
+﻿@model PersonalBlog.WebUI.Models.BlogManager
+@{
+    ViewBag.Title = "Manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="manager-div">
+    <div class="manager-section-title">
+        <h2 class="h2italic">Блоги <span style="color:#aaaaaa;">(@Model.BlogCount)</span></h2>
+        <div class="manager-section-title-add">
+            @using (Html.BeginForm("BlogCreate", "BlogManager"))
+            {
+                <input type="image" src="~/Content/Picture/createe.png" class="input-add"/>
+            }
+        </div>
+    </div>
+    <div class="manager-section-content">
+        @foreach (var a in Model.Blogs)
+        {
+            <div class="manager-section-content-one">
+                @if (a.ImageData == null)
+                {
+                <img src="~/Content/Picture/tulips1.jpg" class="image-background-manager">
+                }
+                else
+                { 
+                    <img src = "@Url.Action("GetImage", "BlogManager", new { a.BlogId })" class="image-background-manager">
+                }
+                <div class="blog-cont">
+                    <div class="edit-delete">
+                        <a href="/BlogManager/BlogEdit?BlogId=@a.BlogId"> <img src="~/Content/Picture/ed.png" class="manager-link-edit"></a>
+                        @using (Html.BeginForm("BlogDelete", "BlogManager"))
+                        {
+                            @Html.Hidden("BlogId", a.BlogId)
+                            <input type="image" src="~/Content/Picture/m.png" class="manager-link-delete"/>
+                        }
+                    </div>
+                    <div class="manager-date">@a.DateOfCreate.Date.ToLongDateString()</div>
+                    <h2 class="h2-blog">@Html.ActionLink(@a.Name, "PostManager", new { blogId = a.BlogId})</h2>
+                </div>
+            </div>
+        }
+    </div>
+</div>

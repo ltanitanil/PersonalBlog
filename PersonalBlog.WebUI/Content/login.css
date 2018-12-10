@@ -1,0 +1,80 @@
+﻿body {
+    background: #ededed;
+    padding: 3%;
+    margin: 0 0;
+    font-family: 'Lora', serif;
+}
+
+.header-image {
+    max-width: 350px;
+    max-height: 121px;
+    padding-right: 90px;
+    padding-left: 10px;
+}
+header {
+    border-bottom: 1px solid #ededed;
+}
+.header a{
+    text-decoration: none;
+    color: #121212;
+    font-family: 'Yanone Kaffeesatz';
+    font-size: 19px;
+    line-height: 25px;
+    opacity: .9;
+}
+h4 {
+    font-family: 'Lora', serif;
+    color: #424242;
+    font-size: 14px;
+    text-transform: none;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.1px;
+}
+h5 {
+    font-family: 'Lora', serif;
+    line-height: 1.62;
+    font-size: 12px;
+    color: #aaaaaa;
+    font-weight: 400;
+    
+}
+.form-group {
+    margin: 10px 0px 10px 0px;
+    width: 92%;
+    max-width: 320px;
+    padding-bottom: 5px;
+    color: #424242;
+}
+
+input[type=submit]:hover {
+    color: #EC7A5C;
+}
+.form-control {
+    background-color: #000000;
+    background: inherit;
+    padding: 3%;
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 14px;
+    width: 102.5%;
+    font: inherit;
+}
+    .form-control:hover {
+
+    }
+    .form-control:focus {
+        border: 1px solid rgba(0,0,0,0.8);
+        outline: none;
+        background-color: transparent;
+    }
+
+h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 28px;
+    text-transform: none;
+    margin: 0;
+    color: #121212;
+    letter-spacing: 1px;
+    margin-bottom:25px;
+}

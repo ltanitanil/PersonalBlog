@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,300,regular,700&subset=cyrillic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i|Playfair+Display:400,400i,700,700i,900,900i" rel="stylesheet">
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")"></script>
+    <script>
+        function viewDiv() {
+            if (document.getElementById("search-button-layout").style.display == "block") {
+                document.getElementById("search-button-layout").style.display = "none";
+            } else {
+                document.getElementById("search-button-layout").style.display = "block";
+            }
+        };
+    </script>
+</head>
+<body>
+    <div id="search-button-layout">
+        <form method="get" action="@Url.Action("List", "Post")" class="search-form">
+            <div id="lay-div-flex-1">
+                <input type="text" name="wordsearch" id="search"/>
+            </div>
+            <div id="lay-div-flex-2"  class="styled-select">
+                @Html.DropDownList("filter", new SelectList(new string[] { "по заголовкам постов", "по тегам" }))
+            </div>
+            <div id="lay-div-flex-3">
+                <button type="submit" id="button-iskat">Искать</button>
+            </div>
+        </form>
+    </div>
+    <div class="white-board">
+        <header>
+            <div class="indents-header">
+                <div class="alignment-in-white-board">
+                    <div class="header-menu">
+                        <div class="header-image-div">
+                            <img src="~/Content/Picture/header2.png" class="header-image">
+                        </div>
+                        <div id="lay-flex-posts">
+                            <div id="header-item-search-login">
+                                <div id="user-info-header">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        @Html.Action("Index", "UserProfile")
+                                    }
+                                    else
+                                    {
+                                        <a href="/Account/Login">
+                                            <img src="~/Content/Picture/logRed.png" class="mini-picture-log">
+                                        </a>
+                                    }
+                                </div>
+                                <div class="mini-div-picture">
+                                    <input type="image" src="~/Content/Picture/яяя.png" class="mini-picture-search" onmousedown="viewDiv()">
+                                </div>
+                            </div>
+                            <div class="nav-links">
+                                <div class="nav-links-item">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <h1>@Html.ActionLink("Кабинет", "Manager", "BlogManager")</h1>
+                                    }
+                                    <h1>@Html.ActionLink("Публикации", "list", "Post")</h1>
+                                    <h1>@Html.ActionLink("Пользователи", "")</h1>
+                                    <h1>@Html.ActionLink("О Нас", "")</h1>
+                                    <h1>@Html.ActionLink("Контакты", "")</h1>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="indents">
+            <div class="alignment-in-white-board">
+                @RenderBody()
+            </div>
+        </div>
+        <footer>
+            <img src="~/Content/Picture/tulp.jpg" class="footer-image">
+            <div class="black-footer">
+                <div class="footer-text">
+                    <h5>Тут что-то</h5>
+                </div>
+                <div class="footer-text">
+                    <h5>Таким образом, семантический разбор внешних противодействий позволяет оценить значение дальнейших направлений развития. Каждый из нас понимает очевидную вещь: граница обучения кадров прекрасно подходит для реализации вывода текущих активов. Равным образом, новая модель организационной деятельности требует анализа первоочередных требований. </h5>
+                    <h4>Автор ltanitanil, Брест2018</h4>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+</body>
+</html>

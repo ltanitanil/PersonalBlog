@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PersonalBlog.Domain.Entities.Post>
+
+@{
+    ViewBag.Title = "PostManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="manager-section-title">
+    <h2 class="h2italic">Посты</h2>
+    <div class="manager-section-title-add">
+        @using (Html.BeginForm("PostCreate", "BlogManager"))
+        {
+            @Html.Hidden("blogId", "@ViewBag.BlogId")
+            <input type="image" src="~/Content/Picture/createe.png" class="input-add" />
+        }
+    </div>
+</div>
+<div class="back">@Html.ActionLink("Назад", "Manager")</div>
+@if (Model != null)
+{
+
+    <div class="manager-section-content">
+        @foreach (var a in Model)
+        {
+        <div class="manager-section-content-one">
+            @if (a.ImageData == null)
+            {
+                <img src="~/Content/Picture/tulips1.jpg" class="image-background-manager">
+            }
+            else
+            {
+                <img src="@Url.Action("GetImagePost", "BlogManager", new { a.PostId })" class="image-background-manager">
+            }
+            <div class="blog-cont">
+                <div class="edit-delete">
+                    <a href="/BlogManager/PostEdit?postId=@a.PostId"> <img src="~/Content/Picture/ed.png" class="manager-link-edit"></a>
+                    @using (Html.BeginForm("PostDelete", "BlogManager"))
+                    {
+                        @Html.Hidden("PostId", a.PostId)
+                        <input type="image" src="~/Content/Picture/m.png" class="manager-link-delete" />
+                    }
+                </div>
+                <div class="manager-date">@a.DateOfCreate.Date.ToLongDateString()</div>
+                <h2 class="h2-blog">
+                    @a.Title
+                </h2>
+            </div>
+        </div>
+        }
+    </div>
+}

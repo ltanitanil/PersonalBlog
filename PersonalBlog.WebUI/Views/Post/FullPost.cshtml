@@ -1,0 +1,112 @@
+﻿@using PersonalBlog.Domain.Entities
+@model PersonalBlog.WebUI.Models.FullPost
+
+@{
+    ViewBag.Title = "Post";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="full-post-block">
+    <div id="full-post-flex-1">
+        <h3>@Model.Post.Title</h3>
+        <div class="fullpost-string">
+            <div class="part-full-post"><h4 class="h4-Blog-name"> @Model.Post.Blog.Name</h4></div>
+            <div class="part-full-post">
+                <h4 class="h4-full-post">
+                    <img src="~/Content/Picture/calend.png" id="h4-full-post-pic">
+                    @Model.Post.DateOfCreate.Date.ToLongDateString()
+                </h4>
+            </div>
+            <div class="part-full-post">
+                <h4 class="h4-full-post">
+                    Теги:
+                    @if (@Model.Post.Tags != null)
+                    {
+                        foreach (var link in @Model.Post.Tags)
+                        {
+                            @Html.RouteLink(link.Name, new {
+                            controller = "Post",
+                            action = "List",
+                            tag = link.Name,
+                            page = 1},
+                            new { @class = link.Name == ViewBag.SelectedTag ? "selected" : null})
+                        }
+                    }
+                </h4>
+            </div>
+            <div class="part-full-post">
+                <h4 class="h4-full-post">
+                    <img src="~/Content/Picture/comment.png" id="h4-full-post-img">@ViewBag.CountComments
+                    <a href="/Post/FullPost?postId=@Model.Post.PostId#comments-full-post-id">Comments</a>
+                </h4>
+            </div>
+        </div>
+        <div>
+            @if (Model.Post.ImageData != null)
+            {
+                <img src="@Url.Action("GetImagePost", "Post", new { Model.Post.PostId})" class="image-background-manager">
+            }
+        </div>
+        <div>@Html.Raw(@Model.Post.Text)</div>
+        <h3 class="name-comments">Комментарии</h3>
+        <div id="comments-full-post-id">
+            @foreach (var a in Model.Comment)
+            {
+                <div id="comments-full-post-id-one">
+                    <div id="comments-full-post-img">
+                        @if (a.UserProfile.ImageData == null)
+                        {
+                            if (a.UserProfile.Gender == "Male")
+                            {
+                                <img src="~/Content/Picture/Male.png" class="Profile-picture-comment">
+                            }
+                            else
+                            {
+                                <img src="~/Content/Picture/Female2.png" class="Profile-picture-comment">
+                            }
+                        }
+                        <div id="com-name-date">
+                            <h1> @a.UserProfile.Name</h1>
+                            <h4 class="h4-full-post">
+                                @a.Date.UtcDateTime.ToLongDateString()
+                                @a.Date.UtcDateTime.ToShortTimeString()
+                            </h4>
+                        </div>
+                    </div>
+                    <div id="full-post-text-com">
+                        @a.Text
+                    </div>
+                    <div id="full-post-com-del">
+                        @if (@a.UserProfile.Name == User.Identity.Name)
+                        {
+                            using (Html.BeginForm("DeleteComment", "Post", FormMethod.Post))
+                            {
+                                @Html.Hidden("commentId", a.CommentId)
+                                <input type="image" src="~/Content/Picture/m.png" id="img-com-del" />
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="add-com-div">
+            <h2>Комментировать</h2>
+            @using (Html.BeginForm("AddComment", "Post", FormMethod.Post, new { @class = "form-comment" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group-comment" id="form-add-com">
+                    @Html.Hidden("PostId", @Model.Post.PostId)
+                    @Html.TextArea("Text", "", new { @class = "form-control", @placeholder = "Комментарий" })
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Отправить" class="btn btn-default" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="full-post-flex-2">
+        @*@Html.Action("UserInformation","User", new {id=1})*@
+    </div>
+</div>

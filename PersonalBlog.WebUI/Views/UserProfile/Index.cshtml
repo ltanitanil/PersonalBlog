@@ -1,0 +1,28 @@
+﻿@model PersonalBlog.Domain.Entities.UserProfile
+
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+<a href="/Account/LogOut" id="a-logOut">
+    <div id="con-div-block">
+        @if (Model.ImageData != null)
+        {
+
+        }
+        else
+        {
+            if (Model.Gender == "Male")
+            {
+                <img src="~/Content/Picture/Male.png" class="Profile-picture">
+            }
+            else
+            {
+                <img src="~/Content/Picture/Female2.png" class="Profile-picture">
+            }
+        }
+        <h3 id="user-h3-name">@User.Identity.Name</h3>
+    </div>
+</a>
+}

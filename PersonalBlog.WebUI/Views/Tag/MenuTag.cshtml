@@ -1,0 +1,28 @@
+﻿@model IEnumerable<string>
+
+<div id="tag-block-back">
+    <div id="tag-title">
+        <h2 class="h2italic">Последние теги:</h2>
+    </div>
+    <div id="tag-flex-block">
+
+        @foreach (var link in Model)
+        {
+            <h5>
+                @if (link != null)
+                {
+                    @Html.RouteLink(link, new
+               {
+                   controller = "Post",
+                   action = "List",
+                   tag = link,
+                   page = 1
+               }, new
+               {
+                   @class = link == ViewBag.SelectedTag ? "selected" : null
+               })   }
+            </h5>
+        }
+    </div>
+</div>
+
