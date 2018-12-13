@@ -8,7 +8,7 @@
 <div class="manager-section-title">
     <h2 class="h2italic">Посты</h2>
     <div class="manager-section-title-add">
-        @using (Html.BeginForm("PostCreate", "BlogManager"))
+        @using (Html.BeginForm("PostCreate", "Cabinet"))
         {
             @Html.Hidden("blogId", "@ViewBag.BlogId")
             <input type="image" src="~/Content/Picture/createe.png" class="input-add" />
@@ -29,12 +29,12 @@
             }
             else
             {
-                <img src="@Url.Action("GetImagePost", "BlogManager", new { a.PostId })" class="image-background-manager">
+                <img src="@Url.Action("GetImagePost", "Cabinet", new { a.PostId })" class="image-background-manager">
             }
             <div class="blog-cont">
                 <div class="edit-delete">
                     <a href="/BlogManager/PostEdit?postId=@a.PostId"> <img src="~/Content/Picture/ed.png" class="manager-link-edit"></a>
-                    @using (Html.BeginForm("PostDelete", "BlogManager"))
+                    @using (Html.BeginForm("PostDelete", "Cabinet"))
                     {
                         @Html.Hidden("PostId", a.PostId)
                         <input type="image" src="~/Content/Picture/m.png" class="manager-link-delete" />

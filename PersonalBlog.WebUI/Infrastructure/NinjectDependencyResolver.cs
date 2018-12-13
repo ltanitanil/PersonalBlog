@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Ninject;
 using PersonalBlog.Domain.Abstract;
 using PersonalBlog.Domain.Concrete;
+using PersonalBlog.Domain.Entities;
 using PersonalBlog.WebUI.Infrastructure.Abstract;
 using PersonalBlog.WebUI.Infrastructure.Concreat;
 
@@ -33,13 +34,15 @@ namespace PersonalBlog.WebUI.Infrastructure
         }
         public void AddBinding()
         {
-            kernel.Bind<IPostsRepository>().To<EFPostRepository>();
-            kernel.Bind<IBlogsRepository>().To<EFBlogRepository>();
-            kernel.Bind<ITagsRepository>().To<EFTagRepository>();
-            kernel.Bind<IUsersRepository>().To<EFUserRepository>();
-            kernel.Bind<ICommentsRepository>().To<EFCommentsRepository>();
+            kernel.Bind<IRepository<Post>>().To<EFPostRepository>();
+            kernel.Bind<IRepository<Comment>>().To<EFCommentsRepository>();
+            kernel.Bind<IRepository<UserProfile>>().To<EFUserProfileRepository>();
+            kernel.Bind<IRepository<Blog>>().To<EFBlogRepository>();
+            kernel.Bind<IRepository<User>>().To<EFUserRepository>();
+            kernel.Bind<IRepository<Tag>>().To<EFTagRepository>();
+            
             kernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
-            kernel.Bind<IUsersProfileRepository>().To<EFUserProfileRepository>();
+            
         }
 
     }

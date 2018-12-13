@@ -20,7 +20,7 @@ namespace PersonalBlog.WebUI
 
             routes.MapRoute(null,
               "Кабинет",
-              new { controller = "BlogManager", action = "Manager"}
+              new { controller = "Cabinet", action = "Manager"}
             );
 
             routes.MapRoute(null,

@@ -11,13 +11,13 @@ namespace PersonalBlog.WebUI.Controllers
 {
     public class PostController : Controller
     {
-        private IPostsRepository postsRepository;
-        private ICommentsRepository commentsRepository;
-        private IUsersProfileRepository usersProfileRepository;
+        private IRepository<Post> postsRepository;
+        private IRepository<Comment> commentsRepository;
+        private IRepository<UserProfile> usersProfileRepository;
 
         public int PageSize = 5;
 
-        public PostController(IPostsRepository repPosts, ICommentsRepository repComment, IUsersProfileRepository repUsersProfile)
+        public PostController(IRepository<Post> repPosts, IRepository<Comment> repComment, IRepository<UserProfile> repUsersProfile)
         {
             postsRepository = repPosts;
             commentsRepository = repComment;
@@ -27,13 +27,11 @@ namespace PersonalBlog.WebUI.Controllers
         public ViewResult List(string tag, string wordsearch, string filter, int page = 1)
         {
             string name = null;
-            if (filter == "по заголовкам постов")
-                name = wordsearch;
-            if (filter == "по тегам")
-                tag = wordsearch;
+            if (filter == "по заголовкам постов") name = wordsearch;
+            if (filter == "по тегам") tag = wordsearch;
             PostsListViewModel<Post> model = new PostsListViewModel<Post>()
             {
-                Collection = postsRepository.Posts.OrderBy(p => p.PostId)
+                Collection = postsRepository.Get.OrderBy(p => p.PostId)
                                       .Where(p => (tag == null || p.Tags.Where(l => l.Name == tag).Count() == 1)
                                       && (name == null || (p.Title.Contains(name) || p.Description.Contains(name))))
                                       .Skip((page - 1) * PageSize)
@@ -43,7 +41,7 @@ namespace PersonalBlog.WebUI.Controllers
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
 
-                    TotalItems = (tag == null && name == null) ? postsRepository.Posts.Count() : postsRepository.Posts
+                    TotalItems = (tag == null && name == null) ? postsRepository.Get.Count() : postsRepository.Get
                     .Where(p => (tag == null || p.Tags.Where(l => l.Name == tag).Count() == 1) && (name == null || (p.Title.Contains(name) || p.Description.Contains(name)))).Count()
                 },
                 CurrentTag = tag
@@ -57,8 +55,8 @@ namespace PersonalBlog.WebUI.Controllers
 
             FullPost fullPost = new FullPost()
             {
-                Post = postsRepository.Posts.FirstOrDefault(p => p.PostId == postId),
-                Comment = commentsRepository.Comments.Where(p => p.PostId == postId),
+                Post = postsRepository.Get.FirstOrDefault(p => p.PostId == postId),
+                Comment = commentsRepository.Get.Where(p => p.PostId == postId),
             };
             fullPost.Post.Text=fullPost.Post.Text.Replace("\r\n", "<br>");
             ViewBag.CountComments = fullPost.Comment.Count();
@@ -71,8 +69,8 @@ namespace PersonalBlog.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                comment.UserProfilesId = usersProfileRepository.UsersProfile.FirstOrDefault(p => p.Name == User.Identity.Name).UserProfileId;
-                commentsRepository.SaveComment(comment);
+                comment.UserProfilesId = usersProfileRepository.Get.FirstOrDefault(p => p.Name == User.Identity.Name).UserProfileId;
+                commentsRepository.Save(comment);
                 return RedirectToAction("FullPost", new { comment.PostId});
             }
             else
@@ -84,12 +82,11 @@ namespace PersonalBlog.WebUI.Controllers
         [HttpPost]
         public ActionResult DeleteComment(int commentId)
         {
-            Comment deletedComment = commentsRepository.DeleteComment(commentId);
-            return RedirectToAction("FullPost", new { postId=deletedComment.PostId });
+            return RedirectToAction("FullPost");
         }
         public FileContentResult GetImagePost(int PostId)
         {
-            Post post = postsRepository.Posts.FirstOrDefault(p => p.PostId == PostId);
+            Post post = postsRepository.Get.FirstOrDefault(p => p.PostId == PostId);
             if (post != null)
             {
                 return File(post.ImageData, post.ImageMimeType);

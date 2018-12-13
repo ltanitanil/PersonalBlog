@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Abstract
 {
-    public interface IUsersRepository
+    public interface IRepository<T> where T : IAggregateRoot
     {
-        IEnumerable<User> Users { get;}
-        void SaveUsers(User user);
+        IEnumerable<T> Get { get; }
+        void Save(T item);
+        void Delete(int id);
     }
 }

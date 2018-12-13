@@ -10,14 +10,14 @@ using System.Web.Mvc;
 namespace PersonalBlog.WebUI.Controllers
 {
     [Authorize]
-    public class BlogManagerController : Controller
+    public class CabinetController : Controller
     {
-        private IBlogsRepository blogsRepository;
-        private IPostsRepository postsRepository;
-        private IUsersProfileRepository usersProfileRepository;
-        private ITagsRepository tagsRepository;
+        private IRepository<Blog> blogsRepository;
+        private IRepository<Post> postsRepository;
+        private IRepository<UserProfile> usersProfileRepository;
+        private IRepository<Tag> tagsRepository;
 
-        public BlogManagerController(IBlogsRepository blogRep, IUsersProfileRepository usersProfileRep, IPostsRepository postRep, ITagsRepository tagRep)
+        public CabinetController(IRepository<Blog> blogRep, IRepository<UserProfile> usersProfileRep, IRepository<Post> postRep, IRepository<Tag> tagRep)
         {
             blogsRepository = blogRep;
             usersProfileRepository = usersProfileRep;
@@ -29,27 +29,26 @@ namespace PersonalBlog.WebUI.Controllers
         {
             BlogManager Blogs = new BlogManager()
             {
-                Blogs = blogsRepository.Blogs.Where(p => p.User.Name == User.Identity.Name),
-                BlogCount = blogsRepository.Blogs.Where(p => p.User.Name == User.Identity.Name).Count()
+                Blogs = blogsRepository.Get.Where(p => p.User.Name == User.Identity.Name),
+                BlogCount = blogsRepository.Get.Where(p => p.User.Name == User.Identity.Name).Count()
             };
             return View(Blogs);
         }
         public ActionResult PostManager(int blogId)
         {
             ViewBag.BlogId = blogId;
-            return View(postsRepository.Posts.Where(p => p.BlogId == blogId));
+            return View(postsRepository.Get.Where(p => p.BlogId == blogId));
         }
 
         [HttpPost]
         public ActionResult BlogDelete(int BlogId)
         {
-            Blog deletedBlog = blogsRepository.DeleteBlog(BlogId);
             return RedirectToAction("Manager");
         }
         [HttpGet]
         public ViewResult BlogEdit(int BlogId)
         {
-            Blog blog = blogsRepository.Blogs
+            Blog blog = blogsRepository.Get
               .FirstOrDefault(p => p.BlogId == BlogId);
             if (blog.User.Name == User.Identity.Name) { return View(blog); }
             return View();
@@ -59,14 +58,14 @@ namespace PersonalBlog.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                Blog.UserProfileId = usersProfileRepository.UsersProfile.FirstOrDefault(p => p.Name == User.Identity.Name).UserProfileId;
+                Blog.UserProfileId = usersProfileRepository.Get.FirstOrDefault(p => p.Name == User.Identity.Name).UserProfileId;
                 if (image != null)
                 {
                     Blog.ImageMimeType = image.ContentType;
                     Blog.ImageData = new byte[image.ContentLength];
                     image.InputStream.Read(Blog.ImageData, 0, image.ContentLength);
                 }
-                blogsRepository.SaveBlog(Blog);
+                blogsRepository.Save(Blog);
                 return RedirectToAction("Manager");
             }
             else
@@ -81,7 +80,7 @@ namespace PersonalBlog.WebUI.Controllers
 
         public FileContentResult GetImage(int BlogId)
         {
-            Blog prod = blogsRepository.Blogs.FirstOrDefault(p => p.BlogId == BlogId);
+            Blog prod = blogsRepository.Get.FirstOrDefault(p => p.BlogId == BlogId);
             if (prod != null)
             {
                 return File(prod.ImageData, prod.ImageMimeType);
@@ -98,7 +97,7 @@ namespace PersonalBlog.WebUI.Controllers
         [HttpGet]
         public ViewResult PostEdit(int postId)
         {
-            Post Post = postsRepository.Posts
+            Post Post = postsRepository.Get
             .FirstOrDefault(p => p.PostId == postId);
 
             return View(Post);
@@ -114,8 +113,8 @@ namespace PersonalBlog.WebUI.Controllers
                     postManager.ImageData = new byte[image.ContentLength];
                     image.InputStream.Read(postManager.ImageData, 0, image.ContentLength);
                 }
-                tagsRepository.DeleteTag(postManager.PostId);
-                postsRepository.SavePost(postManager);
+                tagsRepository.Delete(postManager.PostId);
+                postsRepository.Save(postManager);
                 return RedirectToAction("PostManager",new { blogId=postManager.BlogId});
             }
             else
@@ -126,12 +125,11 @@ namespace PersonalBlog.WebUI.Controllers
         [HttpPost]
         public ActionResult PostDelete(int PostId)
         {
-            Post deletedPost = postsRepository.DeletePost(PostId);
-            return RedirectToAction("PostManager", new { blogId = deletedPost.BlogId });
+            return RedirectToAction("PostManager");
         }
         public FileContentResult GetImagePost(int PostId)
         {
-            Post post = postsRepository.Posts.FirstOrDefault(p => p.PostId == PostId);
+            Post post = postsRepository.Get.FirstOrDefault(p => p.PostId == PostId);
             if (post != null)
             {
                 return File(post.ImageData, post.ImageMimeType);

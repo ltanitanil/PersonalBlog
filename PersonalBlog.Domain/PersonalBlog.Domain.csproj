@@ -47,12 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IBlogsRepository.cs" />
-    <Compile Include="Abstract\ICommentsRepository.cs" />
-    <Compile Include="Abstract\IPostsRepository.cs" />
-    <Compile Include="Abstract\ITagsRepository.cs" />
-    <Compile Include="Abstract\IUsersProfileRepository.cs" />
-    <Compile Include="Abstract\IUsersRepository.cs" />
+    <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="Concrete\EFBlogRepository.cs" />
     <Compile Include="Concrete\EFCommentsRepository.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
@@ -62,6 +57,7 @@
     <Compile Include="Concrete\EFUserRepository.cs" />
     <Compile Include="Entities\Blog.cs" />
     <Compile Include="Entities\Comment.cs" />
+    <Compile Include="Entities\IAggregateRoot.cs" />
     <Compile Include="Entities\Post.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\Tag.cs" />

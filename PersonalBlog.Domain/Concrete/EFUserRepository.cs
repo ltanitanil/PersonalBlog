@@ -8,33 +8,43 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Concrete
 {
-    public class EFUserRepository:IUsersRepository
+    public class EFUserRepository : IRepository<User>
     {
-        EFDbContext Context = new EFDbContext();
+        private EFDbContext Context;
 
-        public IEnumerable<User> Users
+        public EFUserRepository()
+        {
+            Context = new EFDbContext();
+        }
+
+        public IEnumerable<User> Get
         {
             get { return Context.Users; }
         }
-        public void SaveUsers(User user)
+
+        public void Delete(int id)
         {
-            if (user.UserId == 0)
+            throw new NotImplementedException();
+        }
+
+        public void Save(User item)
+        {
+            if (item.UserId == 0)
             {
-                Context.Users.Add(user);
+                Context.Users.Add(item);
             }
             else
             {
-                User dbEntry = Context.Users.Find(user.UserId);
+                User dbEntry = Context.Users.Find(item.UserId);
                 if (dbEntry != null)
                 {
                     dbEntry.RoleId = 1;
-                    dbEntry.Name = user.Name;
-                    dbEntry.Password = user.Password;
+                    dbEntry.Name = item.Name;
+                    dbEntry.Password = item.Password;
 
                 }
             }
             Context.SaveChanges();
         }
-
     }
 }

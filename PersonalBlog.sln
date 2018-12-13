@@ -6,11 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalBlog.Domain", "PersonalBlog.Domain\PersonalBlog.Domain.csproj", "{60FBE8B4-C671-4294-A019-5C2302FD9C5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalBlog.WebUI", "PersonalBlog.WebUI\PersonalBlog.WebUI.csproj", "{A3CF02EC-430B-442F-90DF-9A49045AFFE6}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5BEF46F4-12FD-4C3D-8E47-CB06586B2DF0} = {5BEF46F4-12FD-4C3D-8E47-CB06586B2DF0}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalBlog.Tests", "PersonalBlog.Tests\PersonalBlog.Tests.csproj", "{5BEF46F4-12FD-4C3D-8E47-CB06586B2DF0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A3CF02EC-430B-442F-90DF-9A49045AFFE6} = {A3CF02EC-430B-442F-90DF-9A49045AFFE6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

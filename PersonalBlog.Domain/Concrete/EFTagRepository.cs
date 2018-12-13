@@ -8,22 +8,34 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Concrete
 {
-    public class EFTagRepository : ITagsRepository
+    public class EFTagRepository : IRepository<Tag>
     {
-        EFDbContext Context = new EFDbContext();
-        public IEnumerable<Tag> Tags
+        private EFDbContext Context;
+
+        public EFTagRepository()
+        {
+            Context = new EFDbContext();
+        }
+
+        public IEnumerable<Tag> Get
         {
             get { return Context.Tags; }
         }
 
-        public void DeleteTag(int PostId)
+        public void Delete(int id)
         {
-            List<Tag> tags = Context.Tags.Where(p => p.PostId == PostId).ToList();
+            List<Tag> tags = Context.Tags.Where(p => p.PostId == id).ToList();
             foreach (var a in tags)
             {
                 Context.Tags.Remove(a);
             }
-            Context.SaveChanges();
+            Context.SaveChanges();     
+        }
+
+
+        public void Save(Tag item)
+        {
+            throw new NotImplementedException();
         }
     }
 }

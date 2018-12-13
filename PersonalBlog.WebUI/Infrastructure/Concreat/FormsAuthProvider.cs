@@ -12,14 +12,14 @@ namespace PersonalBlog.WebUI.Infrastructure.Concreat
 
     public class FormsAuthProvider : IAuthProvider
     {
-        IUsersRepository usersRepository;
-        public FormsAuthProvider(IUsersRepository repository)
+        IRepository<User> usersRepository;
+        public FormsAuthProvider(IRepository<User> repository)
         {
             usersRepository = repository;
         }
         public bool Authenticate(string login, string password)
         {
-            User user = usersRepository.Users.FirstOrDefault(p =>p.Name==login&&p.Password==password);
+            User user = usersRepository.Get.FirstOrDefault(p =>p.Name==login&&p.Password==password);
             
             if (user != null)
             {

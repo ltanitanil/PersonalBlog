@@ -8,36 +8,47 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Concrete
 {
-    public class EFUserProfileRepository : IUsersProfileRepository
+    public class EFUserProfileRepository : IRepository<UserProfile>
     {
-        EFDbContext Context = new EFDbContext();
-        public IEnumerable<UserProfile> UsersProfile
+        private EFDbContext Context;
+
+        public EFUserProfileRepository()
         {
-            get { return Context.UserProfiles; }
+            Context = new EFDbContext();
         }
 
-
-
-        public void SaveUsersProfile(UserProfile user)
+        public IEnumerable<UserProfile> Get
         {
-            if (user.UserProfileId == 0)
+            get
             {
-                Context.UserProfiles.Add(user);
+                return Context.UserProfiles;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(UserProfile item)
+        {
+            if (item.UserProfileId == 0)
+            {
+                Context.UserProfiles.Add(item);
             }
             else
             {
-                UserProfile dbEntry = Context.UserProfiles.Find(user.UserProfileId);
+                UserProfile dbEntry = Context.UserProfiles.Find(item.UserProfileId);
                 if (dbEntry != null)
                 {
-                    dbEntry.Name = user.Name;
-                    dbEntry.Gender = user.Gender;
-                    dbEntry.Interests = user.Interests;
-                    dbEntry.Age = user.Age;
-                    dbEntry.Country = user.Country;
+                    dbEntry.Name = item.Name;
+                    dbEntry.Gender = item.Gender;
+                    dbEntry.Interests = item.Interests;
+                    dbEntry.Age = item.Age;
+                    dbEntry.Country = item.Country;
                 }
             }
             Context.SaveChanges();
         }
-        
     }
 }

@@ -10,11 +10,16 @@ using PersonalBlog.Domain.Entities;
 
 namespace PersonalBlog.Domain.Concrete
 {
-    public class EFPostRepository : IPostsRepository
+    public class EFPostRepository : IRepository<Post>
     {
-        private EFDbContext Context = new EFDbContext();
+        private EFDbContext Context;
 
-        public IEnumerable<Post> Posts
+        public EFPostRepository()
+        {
+            Context = new EFDbContext();
+        }
+
+        public IEnumerable<Post> Get
         {
             get
             {
@@ -23,23 +28,22 @@ namespace PersonalBlog.Domain.Concrete
             }
         }
 
-        public Post DeletePost(int PostId)
+        public void Delete(int id)
         {
-            Post dbEntry = Context.Posts.Find(PostId);
+            Post dbEntry = Context.Posts.Find(id);
             if (dbEntry != null)
             {
                 Context.Posts.Remove(dbEntry);
                 Context.SaveChanges();
             }
-            return dbEntry;
         }
 
-        public void SavePost(Post Post)
+        public void Save(Post item)
         {
             List<Tag> tags = new List<Tag>();
-            if (Post.Tags != null)
+            if (item.Tags != null)
             {
-                foreach (var a in Post.Tags)
+                foreach (var a in item.Tags)
                 {
                     if (a.Name != null)
                     {
@@ -47,27 +51,27 @@ namespace PersonalBlog.Domain.Concrete
                     }
                 }
             }
-            Post.Tags = tags;
-            if (Post.PostId == 0)
+            item.Tags = tags;
+            if (item.PostId == 0)
             {
-                Post.DateOfCreate = DateTimeOffset.Now;
-                Context.Posts.Add(Post);
+                item.DateOfCreate = DateTimeOffset.Now;
+                Context.Posts.Add(item);
             }
             else
             {
-                Post dbEntry = Context.Posts.Find(Post.PostId);
+                Post dbEntry = Context.Posts.Find(item.PostId);
                 if (dbEntry != null)
                 {
-                    dbEntry.Title = Post.Title;
-                    if (Post.ImageData != null)
+                    dbEntry.Title = item.Title;
+                    if (item.ImageData != null)
                     {
-                        dbEntry.ImageData = Post.ImageData;
-                        dbEntry.ImageMimeType = Post.ImageMimeType;
+                        dbEntry.ImageData = item.ImageData;
+                        dbEntry.ImageMimeType = item.ImageMimeType;
                     }
-                    dbEntry.Description = Post.Description;
-                    dbEntry.BlogId = Post.BlogId;
-                    dbEntry.Tags = Post.Tags;
-                    dbEntry.Text = Post.Text;
+                    dbEntry.Description = item.Description;
+                    dbEntry.BlogId = item.BlogId;
+                    dbEntry.Tags = item.Tags;
+                    dbEntry.Text = item.Text;
                 }
             }
             Context.SaveChanges();

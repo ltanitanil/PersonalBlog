@@ -9,32 +9,38 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Concrete
 {
-    public class EFCommentsRepository : ICommentsRepository
+    public class EFCommentsRepository : IRepository<Comment>
     {
-        EFDbContext Context = new EFDbContext(); 
-        public IEnumerable<Comment> Comments
+        private EFDbContext Context;
+
+        public EFCommentsRepository()
         {
-            get {return Context.Comments.Include(p=>p.UserProfile); }
+            Context = new EFDbContext();
         }
 
-        public void SaveComment(Comment comment)
+        public IEnumerable<Comment> Get
         {
-            if (comment.CommentId == 0)
-            {
-                comment.Date = DateTimeOffset.Now;
-                Context.Comments.Add(comment);
-            }
-            Context.SaveChanges();
+            get { return Context.Comments.Include(p => p.UserProfile); }
         }
-        public Comment DeleteComment(int CommentId)
+
+        public void Delete(int id)
         {
-            Comment dbEntry = Context.Comments.Find(CommentId);
+            Comment dbEntry = Context.Comments.Find(id);
             if (dbEntry != null)
             {
                 Context.Comments.Remove(dbEntry);
                 Context.SaveChanges();
             }
-            return dbEntry;
+        }
+
+        public void Save(Comment item)
+        {
+            if (item.CommentId == 0)
+            {
+                item.Date = DateTimeOffset.Now;
+                Context.Comments.Add(item);
+            }
+            Context.SaveChanges();
         }
     }
 }

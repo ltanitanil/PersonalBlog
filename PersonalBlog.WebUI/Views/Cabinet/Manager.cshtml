@@ -8,7 +8,7 @@
     <div class="manager-section-title">
         <h2 class="h2italic">Блоги <span style="color:#aaaaaa;">(@Model.BlogCount)</span></h2>
         <div class="manager-section-title-add">
-            @using (Html.BeginForm("BlogCreate", "BlogManager"))
+            @using (Html.BeginForm("BlogCreate", "Cabinet"))
             {
                 <input type="image" src="~/Content/Picture/createe.png" class="input-add"/>
             }
@@ -24,12 +24,12 @@
                 }
                 else
                 { 
-                    <img src = "@Url.Action("GetImage", "BlogManager", new { a.BlogId })" class="image-background-manager">
+                    <img src = "@Url.Action("GetImage", "Cabinet", new { a.BlogId })" class="image-background-manager">
                 }
                 <div class="blog-cont">
                     <div class="edit-delete">
-                        <a href="/BlogManager/BlogEdit?BlogId=@a.BlogId"> <img src="~/Content/Picture/ed.png" class="manager-link-edit"></a>
-                        @using (Html.BeginForm("BlogDelete", "BlogManager"))
+                        <a href="/Cabinet/BlogEdit?BlogId=@a.BlogId"> <img src="~/Content/Picture/ed.png" class="manager-link-edit"></a>
+                        @using (Html.BeginForm("BlogDelete", "Cabinet"))
                         {
                             @Html.Hidden("BlogId", a.BlogId)
                             <input type="image" src="~/Content/Picture/m.png" class="manager-link-delete"/>

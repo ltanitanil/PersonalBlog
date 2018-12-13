@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PersonalBlog.Domain.Abstract;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,11 +9,10 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Entities
 {
-    public class UserProfile
+    public class UserProfile: IAggregateRoot
     {
         [Key]
         [Column("UserProfileId")]
-
         public int UserProfileId { get; set; }
 
         public string Name { get; set; }

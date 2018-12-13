@@ -8,22 +8,19 @@ using System.Web.Mvc;
 
 namespace PersonalBlog.WebUI.Controllers
 {
-    
     public class UserProfileController : Controller
     {
-        IUsersProfileRepository usersProfileR;
+        IRepository<UserProfile> usersProfileR;
 
-        public UserProfileController(IUsersProfileRepository repository)
+        public UserProfileController(IRepository<UserProfile> repository)
         {
             usersProfileR = repository;
         }
         // GET: UserProfile
         public ViewResult Index()
         {
-            UserProfile userProfile = usersProfileR.UsersProfile.FirstOrDefault(p => p.Name == User.Identity.Name);
+            UserProfile userProfile = usersProfileR.Get.FirstOrDefault(p => p.Name == User.Identity.Name);
             return View(userProfile);
         }
-
-
     }
 }

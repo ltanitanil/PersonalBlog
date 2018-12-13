@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Entities
 {
-    public class Comment
+    public class Comment: IAggregateRoot
     {
         public int CommentId { get; set; }
         [Required(ErrorMessage = "Пустой комментарий")]

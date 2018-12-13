@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Entities
 {
-    public class User
+    public class User : IAggregateRoot
     {  
         [Key]
         public int UserId { get; set; }

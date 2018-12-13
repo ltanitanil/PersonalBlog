@@ -9,44 +9,49 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Domain.Concrete
 {
-    public class EFBlogRepository : IBlogsRepository
+    public class EFBlogRepository : IRepository<Blog>
     {
-        EFDbContext Context = new EFDbContext();
-        public IEnumerable<Blog> Blogs
+        private EFDbContext Context;
+
+        public EFBlogRepository()
+        {
+            Context = new EFDbContext();
+        }
+
+        public IEnumerable<Blog> Get
         {
             get { return Context.Blogs.Include(q => q.Posts).Include(q => q.User); }
         }
 
-        public Blog DeleteBlog(int BlogId)
+        public void Delete(int id)
         {
-            Blog dbEntry = Context.Blogs.Find(BlogId);
+            Blog dbEntry = Context.Blogs.Find(id);
             if (dbEntry != null)
             {
                 Context.Blogs.Remove(dbEntry);
                 Context.SaveChanges();
             }
-            return dbEntry;
         }
 
-        public void SaveBlog(Blog Blog)
+        public void Save(Blog item)
         {
-            if (Blog.BlogId == 0)
+            if (item.BlogId == 0)
             {
-                Blog.DateOfCreate = DateTimeOffset.Now;
-                Context.Blogs.Add(Blog);
+                item.DateOfCreate = DateTimeOffset.Now;
+                Context.Blogs.Add(item);
             }
             else
             {
-                Blog dbEntry = Context.Blogs.Find(Blog.BlogId);
+                Blog dbEntry = Context.Blogs.Find(item.BlogId);
                 if (dbEntry != null)
                 {
-                    dbEntry.Name = Blog.Name;
-                    if(Blog.ImageData!=null)
+                    dbEntry.Name = item.Name;
+                    if (item.ImageData != null)
                     {
-                    dbEntry.ImageData = Blog.ImageData;
-                    dbEntry.ImageMimeType = Blog.ImageMimeType;
+                        dbEntry.ImageData = item.ImageData;
+                        dbEntry.ImageMimeType = item.ImageMimeType;
                     }
-                    dbEntry.UserProfileId = Blog.UserProfileId;
+                    dbEntry.UserProfileId = item.UserProfileId;
                 }
             }
             Context.SaveChanges();

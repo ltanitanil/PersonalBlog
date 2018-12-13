@@ -13,10 +13,10 @@ namespace PersonalBlog.WebUI.Controllers
     public class AccountController : Controller
     {
         IAuthProvider authProvider;
-        IUsersRepository usersRepository;
-        IUsersProfileRepository usersProfileRepository;
+        IRepository<User> usersRepository;
+        IRepository<UserProfile> usersProfileRepository;
 
-        public AccountController(IAuthProvider provider, IUsersRepository users, IUsersProfileRepository usersProfile)
+        public AccountController(IAuthProvider provider, IRepository<User> users, IRepository<UserProfile> usersProfile)
         {
             authProvider = provider;
             usersRepository = users;
@@ -34,7 +34,7 @@ namespace PersonalBlog.WebUI.Controllers
             {
                 if (authProvider.Authenticate(model.UserName, model.Password))
                 {
-                    return Redirect(returnUrl ?? Url.Action("Manager", "BlogManager"));
+                    return Redirect(returnUrl ?? Url.Action("Manager", "Cabinet"));
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace PersonalBlog.WebUI.Controllers
                 return View();
             }
         }
-
+        [HttpGet]
         public ActionResult Register()
         {
             return View();
@@ -58,13 +58,13 @@ namespace PersonalBlog.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = usersRepository.Users.FirstOrDefault(u => u.Name == model.Name);
+                User user = usersRepository.Get.FirstOrDefault(u => u.Name == model.Name);
                 if (user == null)
                 {
                     User userSave = new User { Name = model.Name, Password = model.Password, UserId = 0, RoleId = 1 };
-                    usersRepository.SaveUsers(userSave);
+                    usersRepository.Save(userSave);
                     UserProfile userProfileSafe = new UserProfile { Name = model.Name, Age = model.Age, Gender = model.Gender, Country = model.Country };
-                    usersProfileRepository.SaveUsersProfile(userProfileSafe);
+                    usersProfileRepository.Save(userProfileSafe);
                     if (authProvider.Authenticate(userSave.Name, userSave.Password))
                     {
                         return RedirectToAction("List", "Post");
